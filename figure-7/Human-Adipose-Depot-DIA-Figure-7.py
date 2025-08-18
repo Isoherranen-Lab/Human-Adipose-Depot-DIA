@@ -5,11 +5,9 @@
 
 import pandas as pd
 from scipy import stats
-from scipy.stats import shapiro
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sbn
-import statsmodels.api as sm
 from adjustText import adjust_text
 from sklearn.preprocessing import StandardScaler
 import warnings
@@ -26,7 +24,7 @@ paired_participants = [3501,3502,3503,3504,3505,3506,3507,
                         3516,3517,3518,3519,3520,3521,3522,
                         3523,3524,3525,3527,3528,3529,
                         3531,3532]
-cleandata = pd.read_csv('figure-6-7-8-data.csv')
+cleandata = pd.read_csv('figure-6-7-8-9-data.csv')
 cleandata = cleandata[cleandata.id.isin(paired_participants)]
 
 tested_protein_list = []
@@ -48,6 +46,7 @@ OM_SC_paired_tests = pd.DataFrame({"Protein":tested_protein_list, "Mean OM Prote
 OM_SC_paired_tests["Adjusted P Value"] = stats.false_discovery_control(OM_SC_paired_tests["P Value"])
 OM_SC_paired_tests = OM_SC_paired_tests.sort_values(by="Adjusted P Value", ascending=True)
 OM_SC_paired_tests["Neg_log10_Adjusted_P_Value"] = -np.log10(OM_SC_paired_tests["Adjusted P Value"])
+OM_SC_paired_tests['abs_log2(Fold Change)'] = abs(OM_SC_paired_tests['log2(Fold Change)'])
 
 threshold = -np.log10(0.05)
 
@@ -65,27 +64,27 @@ plt.locator_params(axis='y', nbins=4)
 plt.locator_params(axis='x', nbins=4)
 OM_is_greater = OM_SC_paired_tests[(OM_SC_paired_tests['Neg_log10_Adjusted_P_Value']>threshold)&(OM_SC_paired_tests['log2(Fold Change)']<-1)]
 SC_is_greater = OM_SC_paired_tests[(OM_SC_paired_tests['Neg_log10_Adjusted_P_Value']>threshold)&(OM_SC_paired_tests['log2(Fold Change)']>1)]
-
-OM_is_greater_points = OM_is_greater.sort_values(by=['Neg_log10_Adjusted_P_Value','log2(Fold Change)'], ascending=[False,True])[:10].reset_index(drop=True)
-SC_is_greater_points = SC_is_greater.sort_values(by=['Neg_log10_Adjusted_P_Value','log2(Fold Change)'], ascending=[False,True])[:10].reset_index(drop=True)
-OM_high_fold_change_points = OM_is_greater[(OM_is_greater["log2(Fold Change)"] < -4)&(OM_is_greater.Neg_log10_Adjusted_P_Value < 4)].reset_index(drop=True)
-SC_high_fold_change_points = SC_is_greater[(SC_is_greater["log2(Fold Change)"] > 3)&(SC_is_greater.Neg_log10_Adjusted_P_Value < 4)].reset_index(drop=True)
-
 OM_is_smaller = OM_SC_paired_tests[(OM_SC_paired_tests['Neg_log10_Adjusted_P_Value']>threshold)&(OM_SC_paired_tests['log2(Fold Change)']>-1)&(OM_SC_paired_tests['log2(Fold Change)']<0)]
 SC_is_smaller = OM_SC_paired_tests[(OM_SC_paired_tests['Neg_log10_Adjusted_P_Value']>threshold)&(OM_SC_paired_tests['log2(Fold Change)']<1)&(OM_SC_paired_tests['log2(Fold Change)']>0)]
 
+OM_is_greater_points = OM_SC_paired_tests[OM_SC_paired_tests['log2(Fold Change)']<-1].sort_values(by=['Adjusted P Value','abs_log2(Fold Change)'], ascending=[True,False])[:10].reset_index(drop=True)
+SC_is_greater_points = OM_SC_paired_tests[OM_SC_paired_tests['log2(Fold Change)']>1].sort_values(by=['Adjusted P Value','abs_log2(Fold Change)'], ascending=[True,False])[:10].reset_index(drop=True)
+
+OM_high_fold_change_points = OM_is_greater[(OM_is_greater["log2(Fold Change)"] < -4)&(OM_is_greater.Neg_log10_Adjusted_P_Value < 4)].reset_index(drop=True)
+SC_high_fold_change_points = SC_is_greater[(SC_is_greater["log2(Fold Change)"] > 3)&(SC_is_greater.Neg_log10_Adjusted_P_Value < 4)].reset_index(drop=True)
+
 plt.scatter(x=OM_is_greater['log2(Fold Change)'],y=OM_is_greater['Neg_log10_Adjusted_P_Value'],edgecolor='none',label="Enriched in OM",color=[153/255,0/255,0/255],s=30)
-plt.scatter(x=SC_is_greater['log2(Fold Change)'],y=SC_is_greater['Neg_log10_Adjusted_P_Value'],edgecolor='none',label="Enriched in SC",color=[0/255,76/255,153/255],s=30)
-plt.scatter(x=OM_is_smaller['log2(Fold Change)'],y=OM_is_smaller['Neg_log10_Adjusted_P_Value'],edgecolor='none',color=[255/255,204/255,204/255],s=30)
-plt.scatter(x=SC_is_smaller['log2(Fold Change)'],y=SC_is_smaller['Neg_log10_Adjusted_P_Value'],edgecolor='none',color=[153/255,204/255,255/255],s=30)
+plt.scatter(x=SC_is_greater['log2(Fold Change)'],y=SC_is_greater['Neg_log10_Adjusted_P_Value'],edgecolor='none',label="Enriched in SQ",color=[0/255,76/255,153/255],s=30)
+plt.scatter(x=OM_is_smaller['log2(Fold Change)'],y=OM_is_smaller['Neg_log10_Adjusted_P_Value'],edgecolor='none',color=[0.949, 0.773, 0.808],s=30)
+plt.scatter(x=SC_is_smaller['log2(Fold Change)'],y=SC_is_smaller['Neg_log10_Adjusted_P_Value'],edgecolor='none',color=(0.773, 0.867, 0.949),s=30)
 
 legend = plt.legend()
 plt.setp(legend.get_texts(), fontsize=16)
 
-OM_x_axis = [-6.3,-6.7,-7.2,-6.9,-5.8,-3.5,-2.9,-6,-3.7,-4.7]
-OM_y_axis = [5.25,4.7,4.9,5.5,5.7,5.7,5.9,4.5,4.2,4.45]
-SC_x_axis = [1.2, 2.1, 3.5, 3.2, 5.5, 5.0,5.2,5.0,4.5,2.1]
-SC_y_axis = [5.9, 5.7, 5.5, 5.25, 5.15, 4.9,4.6,4.3,4.0,4.1]
+OM_x_axis = [-7.5,-7.4,-7.4,-7.4,-6.0,-4.8,-3.1,-6.2,-3.7,-4.7]
+OM_y_axis = [5.5,5.0,5.2,4.8,5.7,5.9,5.8,4.6,4.2,4.45]
+SC_x_axis = [2.1, 1.2, 3.2, 3.5, 5.5, 5.0,5.2,5.0,2.1,4.5]
+SC_y_axis = [5.7, 5.9, 5.25, 5.5, 5.15, 4.9,4.6,4.3,4.1,4.0]
 
 for i in range(10):
     plt.annotate(getProteinName(OM_is_greater_points['Protein'][i]), 
@@ -106,6 +105,7 @@ adjust_text([plt.text(OM_high_fold_change_points['log2(Fold Change)'][i],
 plt.legend(loc='lower left', prop={'size':10})
 
 plt.savefig('figure-7b.pdf',dpi=1200, bbox_inches='tight')
+plt.savefig('figure-7b.png',dpi=1200, bbox_inches='tight')
 plt.clf()
 
 # figure c
@@ -113,9 +113,8 @@ plt.clf()
 def getProteinName(input):
     return input.split('|')[2].split('_')[0]
 
-
 tissue_type_feature = pd.read_csv('figure-7c-data.csv')
-proteomics_data_cleaned = pd.read_csv('figure-6-7-8-data.csv')
+proteomics_data_cleaned = pd.read_csv('figure-6-7-8-9-data.csv')
 tissue_type_wsrtest = proteomics_data_cleaned[proteomics_data_cleaned.protein.isin(tissue_type_feature.Protein.unique())]
 tissue_type_wsrtest['Protein_ID'] = tissue_type_wsrtest.protein.str.split("|").str[1]
 tissue_type_wsrtest = tissue_type_wsrtest[(tissue_type_wsrtest.id != 3504) | (tissue_type_wsrtest.tissue_type != "SQ")]
@@ -123,9 +122,8 @@ tissue_type_wsrtest = tissue_type_wsrtest[(tissue_type_wsrtest.id != 3504) | (ti
 for i in tissue_type_wsrtest['protein'].unique():
     scalar = StandardScaler()
     tissue_type_wsrtest.loc[tissue_type_wsrtest['protein']==i, 'raw_value'] = scalar.fit_transform(tissue_type_wsrtest[tissue_type_wsrtest['protein']==i][['raw_value']])
-tissue_type_wsrtest.loc[tissue_type_wsrtest.tissue_type=="SQ","tissue_type"]="SC"
 
-metafile = pd.read_csv('figure-7c-metadata.csv')
+metafile = pd.read_csv('figure-7c-9-metadata.csv')
 metafile['ID'] = metafile['ID'].str[3:].astype('int')
 metafile['age group'] = 'age 20-40'
 metafile.loc[np.logical_and(metafile.age >= 40, metafile.age < 60), 'age group'] = 'age 40-60'
@@ -183,6 +181,7 @@ def clustermap_wrap_rotated(data_input,label_features, colors):
     plt.legend(handles=legends, bbox_to_anchor = (3.5, -0.3),fontsize = 12)
     plt.text(x=0,y=5,s='Z Score', fontsize=12)
     plt.savefig('figure-7c.pdf',dpi=1200, bbox_inches='tight')
+    plt.savefig('figure-7c.png',dpi=1200, bbox_inches='tight')
 
 
 clustermap_wrap_rotated(tissue_type_wsrtest_data_final, ['tissue type','sex','age group','bmi group'],

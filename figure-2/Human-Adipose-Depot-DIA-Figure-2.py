@@ -5,14 +5,10 @@
 
 # load packages
 import pandas as pd
-from scipy import stats
-from scipy.stats import shapiro
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sbn
-import pyqtgraph as pg
 import statsmodels.api as sm
-import pingouin as pg
 
 # panel b
 
@@ -49,7 +45,7 @@ Depot_adipocyte_size_difference = 10**(adipocyte_data.SCLogArea) - 10**(adipocyt
 sbn.histplot(x=Depot_adipocyte_size_difference,color = [76/255,0,153/255], alpha=0.3,bins="sturges", stat='count', kde=True, linewidth = 0)
 plt.axvline(x=0, color = [0,0,0], linewidth = 2, linestyle ="--")
 plt.axvline(x=1065, color = [76/255,0,153/255], linewidth = 2)
-plt.xlabel("SC Adipocyte Size - OM Adipocyte Size (µm${^2}$)",size =16)
+plt.xlabel("SQ Adipocyte Size - OM Adipocyte Size (µm${^2}$)",size =16)
 plt.ylabel("Frequency",size =16)
 plt.xticks(fontsize =14)
 plt.yticks(fontsize =14)

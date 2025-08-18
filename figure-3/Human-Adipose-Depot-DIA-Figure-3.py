@@ -41,6 +41,7 @@ ax.tick_params(axis='x', labelsize=12)
 ax.yaxis.offsetText.set_fontsize(16)
 
 plt.savefig('figure-3a.pdf',dpi=1200, bbox_inches='tight')
+plt.savefig('figure-3a.png',dpi=1200, bbox_inches='tight')
 plt.clf()
 
 # panel b
@@ -49,16 +50,8 @@ System_Suitability_CV = pd.read_csv('figure-3b-data.csv')
 System_Suitability_CV.head(3)
 
 fig, ax = plt.subplots(figsize=(3,4.5))
-ax = sbn.boxplot(data=System_Suitability_CV, x='Protein', y='All CV', 
-    fill=False, linewidth=3, color = [0,0,0],
-    showmeans=True,
-    meanline=True,
-    showfliers=False,
-    meanprops={'color': 'black', 'linestyle': '-', 'linewidth': 2},
-    medianprops={'visible': False},
-    whiskerprops={'visible': False},
-    showcaps=False,
-    boxprops={'visible': False})
+ax = sbn.boxplot(data=System_Suitability_CV, x='Protein', y='All CV', showfliers = False,
+    fill=False, linewidth=3, color = [0,0,0])
 plt.ylim(0,40)
 sbn.swarmplot(data=System_Suitability_CV, x='Protein', y='All CV', 
             linewidth=1.5, marker='o', s= 10, alpha = 0.9, color = [76/255,0,153/255])
@@ -77,3 +70,4 @@ ax.tick_params(axis='x', labelsize=12)
 ax.yaxis.offsetText.set_fontsize(16)
 
 plt.savefig('figure-3b.pdf',dpi=1200, bbox_inches='tight')
+plt.savefig('figure-3b.png',dpi=1200, bbox_inches='tight')
