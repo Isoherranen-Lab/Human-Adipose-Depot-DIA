@@ -14,15 +14,7 @@ peptide_CV_all = pd.read_csv('figure-3a-data.csv')
 
 fig, ax = plt.subplots(figsize=(4.5,4.5))
 ax = sbn.boxplot(data=peptide_CV_all, x='Protein', y='All CV', 
-    fill=False, linewidth=3, color = [0,0,0],
-    showmeans=True,
-    meanline=True,
-    showfliers=False,
-    meanprops={'color': 'black', 'linestyle': '-', 'linewidth': 2},
-    medianprops={'visible': False},
-    whiskerprops={'visible': False},
-    showcaps=False,
-    boxprops={'visible': False})
+    fill=False, linewidth=3, color = [0,0,0], showfliers=False)
 plt.ylim(0,40)
 sbn.swarmplot(data=peptide_CV_all, x='Protein', y='All CV', 
             linewidth=1.5, marker='o', s= 10, alpha = 0.9, color = [76/255,0,153/255])
