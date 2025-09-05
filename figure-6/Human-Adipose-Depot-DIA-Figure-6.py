@@ -1,7 +1,7 @@
-# ##### Human Adipose Depot DIA (Figure 6)
-# ##### Yue (Winnie) Wen, Alex Zelter, Mike Riffle, Michael J. MacCoss, Nina Isoherranen
-# ##### Department of Pharmaceutics, Department of Genome Science, University of Washington-Seattle
-# ##### 06/12/2025
+##### Human Adipose Depot DIA (Figure 6)
+##### Yue (Winnie) Wen, Alex Zelter, Mike Riffle, Michael J. MacCoss, Nina Isoherranen
+##### Department of Pharmaceutics, Department of Genome Science, University of Washington-Seattle
+##### 09/2025
 
 import pandas as pd
 import numpy as np
@@ -97,12 +97,11 @@ plt.ylim(0,12)
 temp1 = dynamic_range_data[dynamic_range_data.Protein.isin(['sp|P15090|FABP4_HUMAN',
                                                             'sp|O60240|PLIN1_HUMAN',
                                                             'sp|P18206|VINC_HUMAN',
-                                                            'sp|P61026|RAB10_HUMAN',
                                                             'sp|Q15848|ADIPO_HUMAN',
                                                             'sp|P41159|LEP_HUMAN / sp|LEP_HUMAN|P41159'])].reset_index(drop=True)
 
-marker_protein_names = ['PLIN1','FABP4','VINC','LEP','RAB10','ADIPO']
-for i in range(6):
+marker_protein_names = ['PLIN1','FABP4','VINC','LEP','ADIPO']
+for i in range(5):
     if i != 0:
         plt.annotate(marker_protein_names[i], (temp1['OM_rank'][i],temp1['OM Mean log10 PA'][i]),
                  xytext = (temp1['OM_rank'][i]+180,temp1['OM Mean log10 PA'][i]+0.15), arrowprops = dict(arrowstyle='-'))
@@ -133,13 +132,12 @@ plt.ylim(0,12)
 temp1 = dynamic_range_data[dynamic_range_data.Protein.isin(['sp|P15090|FABP4_HUMAN',
                                                             'sp|O60240|PLIN1_HUMAN',
                                                             'sp|P18206|VINC_HUMAN',
-                                                            'sp|P61026|RAB10_HUMAN',
                                                             'sp|Q15848|ADIPO_HUMAN',
                                                             'sp|P41159|LEP_HUMAN / sp|LEP_HUMAN|P41159'])].reset_index(drop=True)
 # Based on order in the dataset
-marker_protein_names = ['PLIN1','FABP4','VINC','LEP','RAB10','ADIPO']
-for i in range(6):
-    if i != 0 and i != 6:
+marker_protein_names = ['PLIN1','FABP4','VINC','LEP','ADIPO']
+for i in range(5):
+    if i != 0 and i != 5:
         plt.annotate(marker_protein_names[i], (temp1['SQ_rank'][i],temp1['SQ Mean log10 PA'][i]),
                  xytext = (temp1['SQ_rank'][i]+300,temp1['SQ Mean log10 PA'][i]+0.1), arrowprops = dict(arrowstyle='-'))
     else:

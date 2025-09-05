@@ -1,7 +1,7 @@
-# ##### Human Adipose Depot DIA (Figure 7)
-# ##### Yue (Winnie) Wen, Alex Zelter, Mike Riffle, Michael J. MacCoss, Nina Isoherranen
-# ##### Department of Pharmaceutics, Department of Genome Science, University of Washington-Seattle
-# ##### 06/12/2025
+##### Human Adipose Depot DIA (Figure 7)
+##### Yue (Winnie) Wen, Alex Zelter, Mike Riffle, Michael J. MacCoss, Nina Isoherranen
+##### Department of Pharmaceutics, Department of Genome Science, University of Washington-Seattle
+##### 09/2025
 
 import pandas as pd
 from scipy import stats
@@ -171,7 +171,7 @@ def clustermap_wrap_rotated(data_input,label_features, colors):
     labels = pd.concat([labels, data['blank'].map(dict(zip(data['blank'],['white']))).rename('')], axis=1)  
 
     g = sbn.clustermap(data_t, col_colors=labels, col_cluster=True, colors_ratio=0.022,
-                       cmap = sbn.color_palette("mako_r", as_cmap=True),yticklabels=False,xticklabels=1,figsize=(12,14))
+                       cmap="RdBu", vmin = -4, vmax = 4,yticklabels=False,xticklabels=1,figsize=(12,14))
     
     g.fig.subplots_adjust(right=0.7)
     g.ax_heatmap.set_ylabel("")

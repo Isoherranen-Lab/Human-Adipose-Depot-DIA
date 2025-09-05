@@ -1,7 +1,7 @@
-# ##### Human Adipose Depot DIA (Figure 8)
-# ##### Yue (Winnie) Wen, Alex Zelter, Mike Riffle, Michael J. MacCoss, Nina Isoherranen
-# ##### Department of Pharmaceutics, Department of Genome Science, University of Washington-Seattle
-# ##### 06/12/2025
+##### Human Adipose Depot DIA (Figure 8)
+##### Yue (Winnie) Wen, Alex Zelter, Mike Riffle, Michael J. MacCoss, Nina Isoherranen
+##### Department of Pharmaceutics, Department of Genome Science, University of Washington-Seattle
+##### 09/2025
 
 import pandas as pd
 import numpy as np

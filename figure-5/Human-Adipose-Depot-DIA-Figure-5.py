@@ -1,109 +1,52 @@
-# ##### Human Adipose Depot DIA (Figure 5)
-# ##### Yue (Winnie) Wen, Alex Zelter, Mike Riffle, Michael J. MacCoss, Nina Isoherranen
-# ##### Department of Pharmaceutics, Department of Genome Science, University of Washington-Seattle
-# ##### 06/12/2025
-
-# load packages and function
+##### Human Adipose Depot DIA Code (Figure 5)
+##### Yue (Winnie) Wen, Alex Zelter, Mike Riffle, Michael J. MacCoss, Nina Isoherranen
+##### Department of Pharmaceutics, Department of Genome Science, University of Washington-Seattle
+##### 09/2025
 
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sbn
 
-def getCleanColumnName(input):
-    split_lst = input.split('.')
-    return split_lst[1] + "_" + split_lst[2] + "_" + split_lst[4].split('_')[0]
-
 # panel a
 
-unnormalized_peptidedata = pd.read_csv('figure-5ab-data.tsv', sep='\t')
-for i in unnormalized_peptidedata.columns[3:]:
-    unnormalized_peptidedata=unnormalized_peptidedata.rename(columns={i:getCleanColumnName(i)})
-unnormalized_peptidedata = pd.melt(unnormalized_peptidedata,id_vars="modifiedSequence", value_vars=unnormalized_peptidedata.columns[3:])
-unnormalized_peptidedata['log2_value'] = unnormalized_peptidedata['value']
-unnormalized_peptidedata['value'] = 2**(unnormalized_peptidedata['log2_value'])-1
-unnormalized_peptidedata['tissue_type'] = unnormalized_peptidedata['variable'].str.split('_').str[1]
-unnormalized_peptidedata['bmi'] = unnormalized_peptidedata['variable'].str.split('_').str[2]
-unnormalized_peptidedata = unnormalized_peptidedata.rename(columns={'variable':'id'})
-unnormalized_peptidedata['id'] = unnormalized_peptidedata['id'].str.split('_').str[0]
-unnormalized_peptidedata['id_tissue_type'] = unnormalized_peptidedata['id'] + "-" + unnormalized_peptidedata['tissue_type']
-plt.figure(figsize=(15,5))
-ax=sbn.boxplot(x='id_tissue_type',y=unnormalized_peptidedata['value']/(10**11), data=unnormalized_peptidedata, hue='tissue_type', palette=[[0/255,76/255,153/255],[153/255,0,0]],
-            order=unnormalized_peptidedata.sort_values(['tissue_type','id'])['id_tissue_type'])
-for patch in ax.patches:
-    r, g, b, a = patch.get_facecolor()
-    patch.set_facecolor((r, g, b, 0.6))
-plt.xticks(rotation=90)
-plt.yticks(fontsize=14)
-plt.xticks(fontsize=10)
-plt.xlabel("")
-plt.ylabel("Peptide peak area (x $10^{11}$)", size = 16)
-plt.legend(loc='center left', bbox_to_anchor=(1, 0.5), fontsize = 14)
-plt.title('Raw Values', fontsize=16)
-plt.savefig('figure-5a-boxplot.pdf',dpi=1200, bbox_inches='tight')
-plt.savefig('figure-5a-boxplot.png',dpi=1200, bbox_inches='tight')
-plt.clf()
-plt.figure(figsize=(5,5))
-sbn.kdeplot(y=unnormalized_peptidedata['value']/(10**11), data=unnormalized_peptidedata, fill=True, color='grey')
-plt.ylabel("Peptide peak area (x $10^{11}$)", size = 16)
-plt.savefig('figure-5a-kde-density.pdf',dpi=1200, bbox_inches='tight')
-plt.savefig('figure-5a-kde-density.png',dpi=1200, bbox_inches='tight')
-plt.clf()
+data = pd.read_csv("figure-5-data.csv")
+data['tissue'] = data['Sample Name'].str.split('-').str[2]
+data['bmi'] = data['Sample Name'].str.split('-').str[-1]
+data.loc[data['bmi']=='obese','bmi'] = '+obesity'
+data.loc[data['bmi']=='lean','bmi'] = '-obesity'
+boxplot_data1 = data[['Peptide Detections', 'Protein Detections', 'tissue']]
+boxplot_data1.columns = ['Peptide Detections', 'Protein Detections', 'category']
+boxplot_data2 = data[['Peptide Detections', 'Protein Detections', 'bmi']]
+boxplot_data2.columns = ['Peptide Detections', 'Protein Detections', 'category']
+boxplot_data = pd.concat(
+    [boxplot_data1, boxplot_data2]
+)
+fig, ax = plt.subplots(figsize=(6,5))
+sbn.boxplot(x=boxplot_data['category'], y=boxplot_data['Peptide Detections'], order=['OM','SQ','+obesity','-obesity'],fill=False,linewidth=2,color='black',showfliers = False)
+sbn.swarmplot(x=boxplot_data['category'], y=boxplot_data['Peptide Detections'], order=['OM','SQ','+obesity','-obesity'],s=10,alpha = 0.3,palette=[[153/255,0,0], [0,76/255,153/255], [153/255,0,153/255], [0,153/255,76/255]])
+plt.ylim(0, 50000)
+plt.title("Peptide Detections", size = 20)
+plt.ylabel('Peptide Detections',fontsize = 18)
+plt.xlabel('',fontsize = 18)
+plt.xticks(fontsize=16)
+plt.yticks(fontsize=16)
+
+plt.savefig('figure-5a.pdf',dpi=1200, bbox_inches='tight')
+plt.savefig('figure-5a.png',dpi=1200, bbox_inches='tight')
 
 # panel b
-plt.figure(figsize=(15,5))
-ax = sbn.boxplot(x='id_tissue_type',y='log2_value', data=unnormalized_peptidedata, hue='tissue_type', palette=[[0/255,76/255,153/255],[153/255,0,0]],
-            order=unnormalized_peptidedata.sort_values(['tissue_type','id'])['id_tissue_type'])
-for patch in ax.patches:
-    r, g, b, a = patch.get_facecolor()
-    patch.set_facecolor((r, g, b, 0.6))
-plt.xticks(rotation=90)
-plt.yticks(fontsize=14)
-plt.xticks(fontsize=10)
-plt.xlabel("")
-plt.ylabel("log$_{2}$(peptide peak area)", size = 16)
-plt.legend(loc='center left', bbox_to_anchor=(1, 0.5), fontsize = 14)
-plt.title(r"$\log_2$ Transformed", fontsize=16)
-plt.savefig('figure-5b-boxplot.pdf',dpi=1200, bbox_inches='tight')
-plt.savefig('figure-5b-boxplot.png',dpi=1200, bbox_inches='tight')
+
 plt.clf()
-plt.figure(figsize=(5,5))
-sbn.kdeplot(y='log2_value', data=unnormalized_peptidedata, fill=True, color='grey')
-plt.ylabel("log$_{2}$(peptide peak area)", size = 16)
-plt.savefig('figure-5b-kde-density.pdf',dpi=1200, bbox_inches='tight')
-plt.savefig('figure-5b-kde-density.png',dpi=1200, bbox_inches='tight')
-plt.clf()
+fig, ax = plt.subplots(figsize=(6,5))
 
-# panel c
+sbn.boxplot(x=boxplot_data['category'], y=boxplot_data['Protein Detections'], order=['OM','SQ','+obesity','-obesity'],fill=False,linewidth=2,color='black',showfliers = False)
+sbn.swarmplot(x=boxplot_data['category'], y=boxplot_data['Protein Detections'], order=['OM','SQ','+obesity','-obesity'],s=10,alpha = 0.3,palette=[[153/255,0,0], [0,76/255,153/255], [153/255,0,153/255], [0,153/255,76/255]])
+plt.ylim(0, 5000)
+plt.title("Protein Detections", size = 20)
+plt.ylabel('Protein Detections',fontsize = 18)
+plt.xlabel('',fontsize = 18)
+plt.xticks(fontsize=16)
+plt.yticks(fontsize=16)
 
-rawpeptidedata = pd.read_csv("figure-5c-data.tsv",sep='\t')
-for i in rawpeptidedata.columns[3:]:
-    rawpeptidedata=rawpeptidedata.rename(columns={i:getCleanColumnName(i)})
-
-rawpeptidedata = pd.melt(rawpeptidedata,id_vars="modifiedSequence", value_vars=rawpeptidedata.columns[3:])
-
-rawpeptidedata['tissue_type'] = rawpeptidedata['variable'].str.split('_').str[1]
-rawpeptidedata['bmi'] = rawpeptidedata['variable'].str.split('_').str[2]
-rawpeptidedata = rawpeptidedata.rename(columns={'variable':'id'})
-rawpeptidedata['id'] = rawpeptidedata['id'].str.split('_').str[0]
-rawpeptidedata['id_tissue_type'] = rawpeptidedata['id'] + "-" + rawpeptidedata['tissue_type']
-plt.figure(figsize=(15,5))
-ax = sbn.boxplot(x='id_tissue_type',y='value', data=rawpeptidedata, hue='tissue_type', palette=[[0/255,76/255,153/255],[153/255,0,0]],
-            order=rawpeptidedata.sort_values(['tissue_type','id'])['id_tissue_type'])
-for patch in ax.patches:
-    r, g, b, a = patch.get_facecolor()
-    patch.set_facecolor((r, g, b, 0.6))
-plt.xticks(rotation=90)
-plt.yticks(fontsize=14)
-plt.xticks(fontsize=10)
-plt.xlabel("")
-plt.ylabel("log$_{2}$(peptide peak area)", size = 16)
-plt.legend(loc='center left', bbox_to_anchor=(1, 0.5), fontsize = 14)
-plt.title("Median Normalized", fontsize=16)
-plt.savefig('figure-5c-boxplot.pdf',dpi=1200, bbox_inches='tight')
-plt.savefig('figure-5c-boxplot.png',dpi=1200, bbox_inches='tight')
-plt.clf()
-plt.figure(figsize=(5,5))
-sbn.kdeplot(y='value', data=rawpeptidedata, fill=True, color='grey')
-plt.ylabel("log$_{2}$(peptide peak area)", size = 16)
-plt.savefig('figure-5c-kde-density.pdf',dpi=1200, bbox_inches='tight')
-plt.savefig('figure-5c-kde-density.png',dpi=1200, bbox_inches='tight')
+plt.savefig('figure-5b.pdf',dpi=1200, bbox_inches='tight')
+plt.savefig('figure-5b.png',dpi=1200, bbox_inches='tight')
