@@ -31,7 +31,7 @@ The _"data cleaning and statistical analysis"_ folder contains code for generati
 
 Each of the figure folders contains corresponding data file and code for reproducing figures in the paper. 
 
-Note: metadata "figure-10/figure-7c-9-10-metadata.csv" is not publicly available due to sensitive clinical study information included. Please request the data by contacting Nina Isoherranen (ni2@uw.edu).
+Note: metadata "figure-7c-9-10-metadata.csv" is not publicly available due to sensitive clinical study information included. Please request the data by contacting Nina Isoherranen (ni2@uw.edu).
 
 ## Citation
 
