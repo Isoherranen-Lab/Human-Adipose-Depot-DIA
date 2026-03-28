@@ -12,7 +12,7 @@ from matplotlib.ticker import ScalarFormatter
 
 # figure a
 
-cleandata = pd.read_csv("figure-6-7-8-9-data.csv")
+cleandata = pd.read_csv("figure-6-7-8-9-10-data.csv")
 paired_participants = [3501,3502,3503,3504,3505,3506,3507,
                                3508,3509,3510,3512,3514,3515,
                                3516,3517,3518,3519,3520,3521,3522,

@@ -33,7 +33,7 @@ def plotEllipse(x, y, ax, n=3.0, color='none', **kwargs):
     return ax.add_patch(ellipse)
 
 # Proteomics dataset
-proteomics_data_cleaned = pd.read_csv('figure-6-7-8-9-data.csv')
+proteomics_data_cleaned = pd.read_csv('figure-6-7-8-9-10-data.csv')
 protein_by_id_tt = proteomics_data_cleaned.pivot(index=['id','tissue_type','bmi'],columns='protein',values='raw_value').reset_index()
 
 # Initialize the StandardScaler and Perform PCA
@@ -70,7 +70,7 @@ plt.clf()
 # figure b
 
 # read data file
-cleandata = pd.read_csv("figure-6-7-8-9-data.csv")
+cleandata = pd.read_csv("figure-6-7-8-9-10-data.csv")
 
 protein_list = []
 OM_mean_list =[]

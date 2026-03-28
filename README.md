@@ -21,21 +21,23 @@ Obesity is a major public health challenge affecting an ever-increasing proporti
 
 > This repository contains code and scripts used for the analyses presented in our paper:  
 > _"Proteomic Profiling of Human Omental and Subcutaneous Adipose Tissue in Individuals with a Broad Range of Body Mass Indexes. "_  
-> [DOI or journal link:xxxxxxxx]
+> [DOI: https://doi.org/10.1038/s41597-026-06948-3 or journal link: https://www.nature.com/articles/s41597-026-06948-3#citeas]
 
 ---
 
 ## Data
 
-The _"data cleaning and statistical analysis"_ folder contains code for generation of figure-6-7-8-9-data.csv for downstream analysis and visualization.
+The _"data cleaning and statistical analysis"_ folder contains code for generation of figure-6-7-8-9-10-data.csv for downstream analysis and visualization.
 
-Each of the figure folders contains corresponding data file and code for reprodcuing figures in the paper. 
+Each of the figure folders contains corresponding data file and code for reproducing figures in the paper. 
+
+Note: metadata "figure-10/figure-7c-9-10-metadata.csv" is not publicly available due to sensitive clinical study information included. Please request the data by contacting Nina Isoherranen (ni2@uw.edu).
 
 ## Citation
 
-If you use this code or data, please cite: xxxxxxx
+If you use this code or data, please cite: DOI: https://doi.org/10.1038/s41597-026-06948-3 or journal link: https://www.nature.com/articles/s41597-026-06948-3#citeas
 
 ## Contact
 
-This project is maintained by the **Isoherranen Lab/Nina Isoherranen&Winnie Wen**.  
+This project is maintained by the **Isoherranen Lab/Nina Isoherranen & Winnie Wen**.  
 Email: ni2@uw.edu or yuewen@uw.edu

@@ -24,7 +24,7 @@ paired_participants = [3501,3502,3503,3504,3505,3506,3507,
                         3516,3517,3518,3519,3520,3521,3522,
                         3523,3524,3525,3527,3528,3529,
                         3531,3532]
-cleandata = pd.read_csv('figure-6-7-8-9-data.csv')
+cleandata = pd.read_csv('figure-6-7-8-9-10-data.csv')
 cleandata = cleandata[cleandata.id.isin(paired_participants)]
 
 tested_protein_list = []
@@ -114,7 +114,7 @@ def getProteinName(input):
     return input.split('|')[2].split('_')[0]
 
 tissue_type_feature = pd.read_csv('figure-7c-data.csv')
-proteomics_data_cleaned = pd.read_csv('figure-6-7-8-9-data.csv')
+proteomics_data_cleaned = pd.read_csv('figure-6-7-8-9-10-data.csv')
 tissue_type_wsrtest = proteomics_data_cleaned[proteomics_data_cleaned.protein.isin(tissue_type_feature.Protein.unique())]
 tissue_type_wsrtest['Protein_ID'] = tissue_type_wsrtest.protein.str.split("|").str[1]
 tissue_type_wsrtest = tissue_type_wsrtest[(tissue_type_wsrtest.id != 3504) | (tissue_type_wsrtest.tissue_type != "SQ")]
@@ -123,7 +123,7 @@ for i in tissue_type_wsrtest['protein'].unique():
     scalar = StandardScaler()
     tissue_type_wsrtest.loc[tissue_type_wsrtest['protein']==i, 'raw_value'] = scalar.fit_transform(tissue_type_wsrtest[tissue_type_wsrtest['protein']==i][['raw_value']])
 
-metafile = pd.read_csv('figure-7c-9-metadata.csv')
+metafile = pd.read_csv('figure-7c-9-10-metadata.csv')
 metafile['ID'] = metafile['ID'].str[3:].astype('int')
 metafile['age group'] = 'age 20-40'
 metafile.loc[np.logical_and(metafile.age >= 40, metafile.age < 60), 'age group'] = 'age 40-60'
@@ -184,12 +184,13 @@ def clustermap_wrap_rotated(data_input,label_features, colors):
     plt.savefig('figure-7c.png',dpi=1200, bbox_inches='tight')
 
 
-clustermap_wrap_rotated(tissue_type_wsrtest_data_final, ['tissue type','sex','age group','bmi group'],
+clustermap_wrap_rotated(tissue_type_wsrtest_data_final, ['tissue type','sex','age group','bmi group','weight stability'],
     [
         [(153/255,0,0),(0,76/255,153/255)],
         [(204/255,153/255,1),(51/255,0,102/255)],
         [(153/255,76/255,0),(1,128/255,0),(1,178/255,102/255)],
-        [(51/255,102/255,0),(102/255,102/255,0),(178/255,1,102/255)]
+        [(51/255,102/255,0),(102/255,102/255,0),(178/255,1,102/255)],
+        [[128/255,128/255,128/255],[153/255,0,76/255]]
     ])
 
 

@@ -7,8 +7,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sbn
 
-overlapped_between_OM_and_SQ = pd.read_csv(r'figure-6-7-8-9-data.csv')
-meta_data = pd.read_csv(r"figure-7c-9-metadata.csv")
+overlapped_between_OM_and_SQ = pd.read_csv(r'figure-6-7-8-9-10-data.csv')
+meta_data = pd.read_csv(r"figure-7c-9-10-metadata.csv")
 
 # panel b
 temp = pd.pivot_table(overlapped_between_OM_and_SQ[overlapped_between_OM_and_SQ.protein=="sp|Q15811|ITSN1_HUMAN"], values='value', index='id', columns='tissue_type')
